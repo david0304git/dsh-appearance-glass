@@ -1,5 +1,7 @@
 # 2 分鐘宣傳片（storyboard）
 
+> 投放用文案（简体中文，含下载途径）：[`promo-2min.zh-CN.md`](promo-2min.zh-CN.md)
+
 - 成品：Release 資產 [`promo-2min.mp4`](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4)（1920×1080、24fps、**118.6 秒**、靜音、27MB）
 - 產生器：`tools/promo/`（HTML 場景 ＋ Swift 逐格錄影器 ＋ ffmpeg 串接）
 - 全部畫面都是**逐格渲染**出來的：用 WKWebView 載入 HTML 場景，呼叫 `window.__render(t)` 之後截圖，
