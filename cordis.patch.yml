@@ -1,0 +1,7 @@
+# dsh-appearance-glass bundle layer: inserts the appearance plugin row.
+# Applied only when this package is listed in the profile's
+# `dsh.profile.bundles`; the row id below IS the settings namespace the
+# browser half reads through ctx.configForms.get('appearance-glass').
+- insert:
+    - id: appearance-glass
+      name: dsh-appearance-glass

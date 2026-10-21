@@ -1,0 +1,70 @@
+{
+  "name": "dsh-appearance-glass",
+  "version": "1.1.0",
+  "description": "DSH 外觀插件：介面透明度（四個分區獨立可調）＋ 內建壁紙顏色；純 alpha，沒有模糊與玻璃特效",
+  "type": "module",
+  "main": "plugin/index.mjs",
+  "exports": {
+    ".": "./plugin/index.mjs",
+    "./client": "./client/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "plugin/",
+    "client/",
+    "test/",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "preview/"
+  ],
+  "scripts": {
+    "test": "node test/run.mjs",
+    "prepublishOnly": "node test/run.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "appearance",
+    "theme",
+    "glass",
+    "liquid-glass",
+    "transparency"
+  ],
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": ">=3.18.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "license": "MIT",
+  "icon": "icon.svg",
+  "author": "david0304git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/david0304git/dsh-appearance-glass.git"
+  },
+  "homepage": "https://github.com/david0304git/dsh-appearance-glass#readme",
+  "bugs": {
+    "url": "https://github.com/david0304git/dsh-appearance-glass/issues"
+  },
+  "engines": {
+    "dsh": ">=0.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

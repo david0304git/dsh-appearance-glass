@@ -1,0 +1,8 @@
+# 投稿到 https://github.com/awesome-dsh-plugin/awesome-dsh-plugin
+# 檔案路徑：data/plugins/david0304git__dsh-appearance-glass.yml
+url: https://github.com/david0304git/dsh-appearance-glass
+name: david0304git/dsh-appearance-glass
+category: theme
+description:
+  en: 'Interface transparency for the DSH web UI: four independently adjustable opacity regions whose sliders show the composited result, plus a built-in wallpaper with three editable colour blobs, a base colour, strength and five palettes.'
+  zh: 'DSH Web 介面透明度：四個分區各自可調，滑桿數值就是實際合成後的透明度；另有可自訂三色斑、底色與強度並內建五組配色的壁紙。'

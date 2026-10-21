@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img">
+  <title>Interface appearance — liquid glass</title>
+  <!--
+    dsh-appearance-glass plugin icon.
+    A frosted glass pane floating over the plugin's own wallpaper palette
+    (#9cc9ff / #ff9fd3 / #8f6dff = the built-in wallpaper blobs), with the
+    liquid-glass signature: bright specular rim, top highlight, soft drop
+    shadow and a faint chromatic fringe. Rendered as a 48×48 <img> in the
+    plugins list, so every colour is explicit (currentColor cannot work) and
+    the tile carries its own background for both light and dark themes.
+  -->
+  <defs>
+    <linearGradient id="ag-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070a15"/>
+      <stop offset=".5" stop-color="#0c1124"/>
+      <stop offset="1" stop-color="#190e28"/>
+    </linearGradient>
+    <radialGradient id="ag-blobA" cx=".08" cy="0" r=".5">
+      <stop offset="0" stop-color="#9cc9ff" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#9cc9ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ag-blobB" cx="1" cy=".02" r=".46">
+      <stop offset="0" stop-color="#ff9fd3" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#ff9fd3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ag-blobC" cx=".5" cy="1.12" r=".72">
+      <stop offset="0" stop-color="#8f6dff" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#8f6dff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ag-vignette" cx=".5" cy=".42" r=".74">
+      <stop offset=".42" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity=".55"/>
+    </radialGradient>
+    <linearGradient id="ag-pane" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".26"/>
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".04"/>
+    </linearGradient>
+    <linearGradient id="ag-rim" x1=".1" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset=".45" stop-color="#ffffff" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="ag-sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".4"/>
+      <stop offset=".42" stop-color="#ffffff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ag-top" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset=".4" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset=".72" stop-color="#ffffff" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ag-cool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fe6ff" stop-opacity=".75"/>
+      <stop offset=".45" stop-color="#8fe6ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ag-warm" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#ff9ad5" stop-opacity=".55"/>
+      <stop offset=".4" stop-color="#ff9ad5" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="ag-shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#04030a" flood-opacity=".55"/>
+    </filter>
+    <clipPath id="ag-tile"><rect width="512" height="512" rx="112"/></clipPath>
+    <clipPath id="ag-paneClip"><rect x="112" y="128" width="288" height="256" rx="58"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#ag-tile)">
+    <rect width="512" height="512" fill="url(#ag-base)"/>
+    <rect width="512" height="512" fill="url(#ag-blobA)"/>
+    <rect width="512" height="512" fill="url(#ag-blobB)"/>
+    <rect width="512" height="512" fill="url(#ag-blobC)"/>
+    <rect width="512" height="512" fill="url(#ag-vignette)"/>
+
+    <g filter="url(#ag-shadow)">
+      <rect x="112" y="128" width="288" height="256" rx="58" fill="url(#ag-pane)"
+            stroke="url(#ag-rim)" stroke-width="8"/>
+    </g>
+
+    <g clip-path="url(#ag-paneClip)">
+      <rect x="112" y="128" width="288" height="256" fill="url(#ag-sheen)"/>
+      <rect x="112" y="129" width="288" height="7" fill="url(#ag-top)"/>
+      <rect x="164" y="200" width="188" height="26" rx="13" fill="#ffffff" fill-opacity=".8"/>
+      <rect x="164" y="250" width="216" height="26" rx="13" fill="#ffffff" fill-opacity=".46"/>
+      <rect x="164" y="300" width="140" height="26" rx="13" fill="#ffffff" fill-opacity=".26"/>
+    </g>
+
+    <g opacity=".85">
+      <rect x="112" y="128" width="288" height="256" rx="58" fill="none"
+            stroke="url(#ag-cool)" stroke-width="3"/>
+      <rect x="116" y="132" width="280" height="248" rx="55" fill="none"
+            stroke="url(#ag-warm)" stroke-width="2"/>
+    </g>
+  </g>
+
+  <rect x="2" y="2" width="508" height="508" rx="111" fill="none"
+        stroke="#ffffff" stroke-opacity=".18" stroke-width="3"/>
+</svg>
