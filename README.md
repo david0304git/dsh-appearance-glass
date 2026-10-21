@@ -7,9 +7,10 @@ Plain alpha only — **no blur, no saturation, no glass effects** (modes and liq
 
 ![Plugin icon](icon.svg)
 
-[![Two-minute promo](preview/promo-poster.jpg)](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4)
+[![Two-minute promo](preview/promo-poster.jpg)](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min-en.mp4)
 
-▶ Two-minute promo (1920×1080; the film itself is MIT too)
+▶ Two-minute promo: **English narration** ([中文旁白](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min-zh.mp4) ・
+[silent](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4))
 
 
 | | |

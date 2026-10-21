@@ -2,5 +2,6 @@ node_modules/
 .DS_Store
 # 27MB 的宣傳片走 Release，不進 git
 preview/*.mp4
+preview/*.m4a
 *.log
 test/.host-under-test.mjs
