@@ -6,3 +6,6 @@ category: theme
 description:
   en: 'Interface transparency for the DSH web UI: four independently adjustable opacity regions whose sliders show the composited result, plus a built-in wallpaper with three editable colour blobs, a base colour, strength and five palettes.'
   zh: 'DSH Web 介面透明度：四個分區各自可調，滑桿數值就是實際合成後的透明度；另有可自訂三色斑、底色與強度並內建五組配色的壁紙。'
+
+# ── 只在 GitHub、不上 npm 時，取消下面這行的註解（先把 tarball 附到 GitHub Release）──
+# tarball: https://github.com/david0304git/dsh-appearance-glass/releases/latest/download/dsh-appearance-glass-1.1.0.tgz
