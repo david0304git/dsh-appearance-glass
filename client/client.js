@@ -668,7 +668,59 @@ window.__ModuleLoader__.load({
     }
 
     // ── 文案 ──────────────────────────────────────────────────────────────
+    /** 簡體中文：DSH 內建的 `zh` 就是簡體，用語對齊官方（界面／侧栏／预设／默认…）。 */
     const zh = {
+      'section.nav': '界面外观',
+      'appearance.title': '界面外观',
+      'appearance.desc': '把面板调淡，就能透出桌面或壁纸；四个区域各自调整。',
+      'enabled': '启用',
+      'disabledNotice': '目前已停用：面板保持 DSH 原本的不透明度。打开标题栏的「启用」就会应用下面的设置。',
+      'fields.needsRestart': '这一版新增了设置字段，要重启 DSH 才会生效（置灰的控件就是还没生效的那些；插件的 Host 半没有热重载）。',
+      'opacity.title': '界面不透明度',
+      'opacity.sync': '同步',
+      'opacity.syncHint': '把「主界面」的值应用到其他三项',
+      'opacity.hint': '数值是「合成后」的不透明度：滑杆写 20% 就真的看到 20%（有些底色叠了好几层，这里已经换算过）。越低越能看见桌面或壁纸。',
+      'opacityBase': '主界面',
+      'opacitySidebar': '侧栏',
+      'opacitySurface': '卡片／输入框',
+      'opacityOverlay': '菜单／浮层',
+      'backdrop.title': '透视背景',
+      'backdrop': '背景',
+      'backdrop.auto': '自动',
+      'backdrop.wallpaper': '内置壁纸',
+      'backdrop.none': '纯透明',
+      'backdrop.desc': '决定面板后面透出来的是什么。「自动」＝桌面版用系统窗口材质（macOS 会把桌面模糊掉），其他环境铺内置壁纸。',
+      'wallpaper.title': '内置壁纸',
+      'wallpaper.desc': '三个色块 ＋ 底色与强度；底色「跟随深浅色」＝浅色淡蓝、深色近黑。',
+      'wallpaper.inactive': '目前「背景」不是内置壁纸，这里的颜色不会显示。',
+      'wallpaper.needsRestart': '这一区的字段还没生效：要重启 DSH（插件的 Host 半没有热重载）。',
+      'wallpaper.preview': '预览',
+      'wallpaper.previewText': '主面板与卡片',
+      'wallpaper.previewMenu': '菜单',
+      'wallpaper.presets': '配色',
+      'wallpaper.blobs': '色块',
+      'wallpaper.a': '色块 1',
+      'wallpaper.b': '色块 2',
+      'wallpaper.c': '色块 3',
+      'wallpaper.base': '底色',
+      'wallpaper.baseAuto': '跟随深浅色',
+      'wallpaper.strength': '强度',
+      'preset.aurora': '极光',
+      'preset.ocean': '深海',
+      'preset.sunset': '日落',
+      'preset.forest': '森林',
+      'preset.graphite': '石墨',
+      'overridden': '本 profile 已自定义',
+      'reset': '恢复默认',
+      'resetDone': '已恢复默认',
+      'resetFailed': '重置失败',
+      'saved': '已应用',
+      'failed': '没有接受这次写入',
+      'readOnly': '本设置是只读的',
+      'unavailable': '插件尚未加载或设置服务不可用，暂时无法调整。',
+    }
+    /** 繁體中文：DSH 的內建 zh 是簡體，所以繁體走「語言包」而不是內建 zh。 */
+    const zhHant = {
       'section.nav': '介面外觀',
       'appearance.title': '介面外觀',
       'appearance.desc': '把面板調淡，就會透出桌面或壁紙；四個分區各自調整。',
@@ -1553,6 +1605,32 @@ window.__ModuleLoader__.load({
           () => ctx.locale.register(LOCALE_NS, { zh, en }),
           'appearance-glass: dictionaries',
         )
+        /**
+         * 繁體中文是「語言包」而不是內建 locale：DSH 內建的 `zh` 是簡體，
+         * 所以繁體走 `locale.addLanguage` + 逐語言的字典註冊（官方 README 的
+         * 「Registering a language pack」寫法）。兩個呼叫都 fail-open：
+         * 舊版 locale 服務沒有這些方法時，外掛只在簡體／英文之間切換。
+         */
+        ctx.effect(() => {
+          const disposers = []
+          try {
+            if (typeof ctx.locale.addLanguage === 'function') {
+              disposers.push(
+                ctx.locale.addLanguage({ id: 'zh-Hant', label: '繁體中文', fallback: 'zh' }),
+              )
+            }
+            if (typeof ctx.locale.register === 'function') {
+              disposers.push(ctx.locale.register(LOCALE_NS, 'zh-Hant', zhHant))
+            }
+          } catch (error) {
+            console.warn('[appearance-glass] zh-Hant language pack unavailable:', error)
+          }
+          return () => {
+            for (const dispose of disposers) {
+              if (typeof dispose === 'function') dispose()
+            }
+          }
+        }, 'appearance-glass: zh-Hant language pack')
 
         // 先畫一次預設值：設定文件是非同步抵達的，這一步讓開機就有玻璃，
         // 之後 adopt() 會以 Host 的值覆蓋（同值時 paint 會自行跳過）。
@@ -1566,7 +1644,9 @@ window.__ModuleLoader__.load({
 
         // 設定側欄那一列的齒輪換成自己的 glyph（DSH 沒有 icon 欄位可宣告）。
         ctx.effect(
-          () => installNavGlyph([zh['section.nav'], en['section.nav']]),
+          // 三種語言的導覽文字都要認：切語言後 React 會重畫那一列，
+          // 只認一種語言的畫，換語言就會變成找不到、齒輪又回來。
+          () => installNavGlyph([zh['section.nav'], zhHant['section.nav'], en['section.nav']]),
           'appearance-glass: sidebar glyph',
         )
 

@@ -95,7 +95,13 @@ function makeDom() {
       svg,
     }
   }
-  const navButtons = [makeNavButton('介面外觀'), makeNavButton('通用設定')]
+  // 三種語言的「自己那一列」＋一列別人的：補丁必須全部認得、且只動自己
+  const navButtons = [
+    makeNavButton('介面外觀'),
+    makeNavButton('界面外观'),
+    makeNavButton('Interface appearance'),
+    makeNavButton('通用设置'),
+  ]
   const body = {
     dark: false,
     navVisible: false,
@@ -257,7 +263,16 @@ function makeScope() {
 }
 
 function makeCtx() {
-  const calls = { tokens: [], releases: [], slots: [], locales: [], effects: [], forms: [] }
+  const calls = {
+    tokens: [],
+    releases: [],
+    slots: [],
+    locales: [],
+    languages: [],
+    addedLanguages: [],
+    effects: [],
+    forms: [],
+  }
   const scope = makeScope()
   const ctx = {
     theme: {
@@ -276,8 +291,17 @@ function makeCtx() {
       },
     },
     locale: {
-      register(ns, dicts) {
-        calls.locales.push({ ns, dicts })
+      register(ns, second, third) {
+        // 兩種寫法：register(ns, {zh,en}) 與 register(ns, languageId, dict)
+        if (typeof second === 'string') {
+          calls.languages.push({ ns, id: second, dict: third })
+          return () => {}
+        }
+        calls.locales.push({ ns, dicts: second })
+        return () => {}
+      },
+      addLanguage(definition) {
+        calls.addedLanguages.push(definition)
         return () => {}
       },
       bind(ns) {
@@ -487,15 +511,39 @@ check('設定頁與外掛卡片的註冊形狀正確（id/order/label/key）', (
   })
 })
 
-check('locale 字典 zh/en 鍵集合一致，且模式字串已全部移除', () => {
+check('locale：zh 是簡體、en 英文，鍵集合一致（DSH 內建 zh 就是簡體）', () => {
   assert.equal(calls.locales.length, 1)
   const { ns, dicts } = calls.locales[0]
   assert.equal(ns, 'appearanceGlass')
   assert.deepEqual(Object.keys(dicts.zh).sort(), Object.keys(dicts.en).sort())
+  // 用字抽查：必須是簡體／官方用語，不能是繁體
+  assert.equal(dicts.zh['section.nav'], '界面外观')
+  assert.equal(dicts.zh['opacitySidebar'], '侧栏')
+  assert.equal(dicts.zh['reset'], '恢复默认')
+  assert.equal(dicts.zh['wallpaper.blobs'], '色块')
+  assert.equal(dicts.en['section.nav'], 'Interface appearance')
+  // 模式／液態玻璃相關的字串必須全部移除
   for (const key of ['mode', 'mode.off', 'mode.clear', 'mode.liquid', 'blur', 'saturate', 'glass.title']) {
     assert.equal(key in dicts.zh, false, `${key} 應該已移除`)
   }
   assert.equal('enabled' in dicts.zh, true)
+})
+
+check('locale：繁體中文走語言包（addLanguage + 逐語言字典），鍵集合與簡體一致', () => {
+  assert.equal(calls.addedLanguages.length, 1)
+  assert.deepEqual(calls.addedLanguages[0], { id: 'zh-Hant', label: '繁體中文', fallback: 'zh' })
+  const pack = calls.languages.find((entry) => entry.id === 'zh-Hant')
+  assert.ok(pack !== undefined, '必須註冊 zh-Hant 的字典')
+  assert.equal(pack.ns, 'appearanceGlass')
+  assert.equal(pack.dict['section.nav'], '介面外觀')
+  assert.equal(pack.dict['opacitySidebar'], '側欄')
+  assert.equal(pack.dict['reset'], '恢復預設')
+  assert.equal(pack.dict['wallpaper.blobs'], '色斑')
+  assert.deepEqual(
+    Object.keys(pack.dict).sort(),
+    Object.keys(calls.locales[0].dicts.en).sort(),
+    '三個語言的鍵集合必須完全相同（少一個 key 就會在切換語言時顯示 key）',
+  )
 })
 
 check('設定頁：標題列（啟用＋恢復預設）＋ 三個區塊，沒有模式方塊', () => {
@@ -837,10 +885,12 @@ check('側欄導覽圖標：只換自己那一列，別人與原樣都保留', (
   FakeMutationObserver.instances.length = 0
   const second = makeCtx()
   main.mod.apply(second.ctx)
-  const [mine, other] = main.dom.body.navButtons
-  assert.equal(mine.svg.attrs['data-dsh-ag-glyph'], '1', '我那一格要被標記')
-  assert.ok(mine.svg.innerHTML.includes('rx="3.2"'), '換成視窗 glyph')
-  assert.equal(other.svg.attrs['data-dsh-ag-glyph'], undefined, '「通用設定」不動')
+  const [hant, simp, english, other] = main.dom.body.navButtons
+  for (const [name, mine] of [['繁中', hant], ['簡中', simp], ['英文', english]]) {
+    assert.equal(mine.svg.attrs['data-dsh-ag-glyph'], '1', `${name}那一格要被標記`)
+    assert.ok(mine.svg.innerHTML.includes('rx="3.2"'), `${name} 換成視窗 glyph`)
+  }
+  assert.equal(other.svg.attrs['data-dsh-ag-glyph'], undefined, '「通用设置」不動')
   assert.equal(other.svg.innerHTML, '<path d="M0 0" class="gear"/>')
   const observer = FakeMutationObserver.instances.at(-1)
   assert.equal(observer.observed[0].options.childList, true)
@@ -848,8 +898,10 @@ check('側欄導覽圖標：只換自己那一列，別人與原樣都保留', (
   const effect = second.calls.effects.find((e) => e.label === 'appearance-glass: sidebar glyph')
   assert.equal(typeof effect.disposer, 'function')
   effect.disposer()
-  assert.equal(mine.svg.innerHTML, '<path d="M0 0" class="gear"/>', '原樣還原')
-  assert.equal(mine.svg.attrs['data-dsh-ag-glyph'], undefined, '標記要清掉')
+  for (const mine of [hant, simp, english]) {
+    assert.equal(mine.svg.innerHTML, '<path d="M0 0" class="gear"/>', '原樣還原')
+    assert.equal(mine.svg.attrs['data-dsh-ag-glyph'], undefined, '標記要清掉')
+  }
   assert.equal(observer.disconnected, true)
 })
 

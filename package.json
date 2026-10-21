@@ -1,7 +1,7 @@
 {
   "name": "dsh-appearance-glass",
-  "version": "1.1.0",
-  "description": "DSH 外觀插件：介面透明度（四個分區獨立可調）＋ 內建壁紙顏色；純 alpha，沒有模糊與玻璃特效",
+  "version": "1.1.1",
+  "description": "Interface transparency for the DSH web UI: four independent opacity regions with composited slider values, plus a built-in wallpaper. Plain alpha, no blur.",
   "type": "module",
   "main": "plugin/index.mjs",
   "exports": {
@@ -17,7 +17,9 @@
     "icon.svg",
     "README.md",
     "LICENSE",
-    "preview/"
+    "preview/",
+    "README.zh-CN.md",
+    "README.zh-TW.md"
   ],
   "scripts": {
     "test": "node test/run.mjs",
