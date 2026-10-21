@@ -7,6 +7,11 @@ DSH 界面透明度插件，外加内置壁纸。
 
 ![插件图标](icon.svg)
 
+[![2 分鐘宣傳片](preview/promo-poster.jpg)](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4)
+
+▶ 2 分鐘宣傳片（1920×1080，MIT，可自由轉載）
+
+
 | | |
 | --- | --- |
 | 设置位置 | **设置 → 界面外观**（独立的 `settings.section` 页面，排在「通用设置」之后、「模型」之前） |

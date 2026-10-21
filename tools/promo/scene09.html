@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css">
+<style>
+.cards{position:absolute;left:60px;top:96px;width:840px;display:flex;gap:16px}
+.c{flex:1;padding:20px 18px;border-radius:16px;background:rgba(18,21,32,.72);border:.5px solid rgba(255,255,255,.11);
+   box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.c .n{font-size:34px;font-weight:600;letter-spacing:-.02em;color:#f2f4f8;font-variant-numeric:tabular-nums}
+.c .t{font-size:12.5px;color:#9db7ff;margin-top:2px}
+.c .d{font-size:11.5px;line-height:1.6;color:#8891a5;margin-top:9px}
+.c .d code{font-family:"SF Mono",Menlo,monospace;color:#c9d3e6}
+.langs{position:absolute;left:0;right:0;top:352px;text-align:center;font-size:11px;letter-spacing:.06em;color:#7d8593}
+</style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+
+  <div class="cards">
+    <div class="c" id="c0">
+      <div class="n">44</div><div class="t">automated checks</div>
+      <div class="d">Host config · client tokens · official token table. Every release runs them before it ships.</div>
+    </div>
+    <div class="c" id="c1">
+      <div class="n">0.2.x</div><div class="t">DSH compatibility</div>
+      <div class="d">Declares <code>engines.dsh</code>, so an older host refuses instead of breaking quietly.</div>
+    </div>
+    <div class="c" id="c2">
+      <div class="n">macOS</div><div class="t">real window material</div>
+      <div class="d">It reveals the native vibrancy the window already has — it does not fake the blur.</div>
+    </div>
+  </div>
+  <div class="langs" id="langs">three languages — 繁體中文 · 简体中文 · English</div>
+  <div class="caption" id="cap"><div class="zh" id="czh">不是畫上去的假玻璃：外掛只把面板換成半透明</div><div class="en2" id="cen">Not painted-on glass: the plugin only makes the panels translucent</div></div>
+</div>
+<script>
+window.__duration = 14.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.012 * (t / window.__duration)})`
+  ;['c0','c1','c2'].forEach((id, i) => {
+    const k = ramp(t, 0.4 + i * 0.5, 1.1 + i * 0.5)
+    const el = $(id)
+    el.style.opacity = k
+    el.style.transform = `translateY(${18 * (1 - k)}px)`
+  })
+  $('langs').style.opacity = ramp(t, 2.6, 3.3)
+  $('cap').style.opacity = ramp(t, 1.2, 1.8) * (1 - ramp(t, 11.2, 12.0))
+  if (t < 5.4) { $('czh').textContent = '不是畫上去的假玻璃：外掛只把面板換成半透明' ; $('cen').textContent = 'Not painted-on glass: the plugin only makes the panels translucent' }
+  else if (t < 8.6) { $('czh').textContent = '每次發佈前都跑同一套測試' ; $('cen').textContent = 'Every release runs the same suite' }
+  else { $('czh').textContent = '介面與文件都是三語' ; $('cen').textContent = 'The UI and the docs ship in three languages' }
+}
+
+</script></body></html>

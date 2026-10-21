@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+<style>
+.mathwrap{position:absolute;left:96px;top:54px;width:768px;text-align:center}
+.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7d8593}
+.formula{margin-top:14px;font-size:52px;font-weight:600;letter-spacing:-.02em;color:#f2f4f8;font-family:"SF Pro Display",-apple-system}
+.formula sup{font-size:26px;vertical-align:super;color:#9db7ff}
+.fnote{margin-top:10px;font-size:12.5px;color:#8891a5}
+.rows{margin:26px auto 0;width:640px;display:flex;flex-direction:column;gap:8px}
+.rows .r{display:flex;justify-content:space-between;gap:16px;padding:10px 14px;border-radius:10px;
+  background:rgba(255,255,255,.045);border:.5px solid rgba(255,255,255,.09);font-size:12px;color:#a3aab8}
+.rows .r b{color:#e9eaee;font-weight:600;font-variant-numeric:tabular-nums}
+.badge2{margin-top:22px;display:inline-block;padding:7px 14px;border-radius:999px;font-size:12px;color:#9db7ff;
+  background:rgba(91,139,255,.12);border:.5px solid rgba(91,139,255,.3)}
+.badge2 code{font-family:"SF Mono",Menlo,monospace;color:#c9d3e6}
+</style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+
+  <div class="mathwrap">
+    <div class="kicker" id="k1">why 20% looked like 36%</div>
+    <div class="formula" id="f1">a = 1 − (1 − t)<sup>1/d</sup></div>
+    <div class="fnote" id="f2">t = the opacity you ask for · d = how many layers are actually stacked</div>
+    <div class="rows" id="rows">
+      <div class="r"><span>two layers · main panel</span><b>43% per layer → 68% composited</b></div>
+      <div class="r"><span>one layer · cards</span><b>68% → 68%</b></div>
+      <div class="r"><span>sidebar · a 40% tint on top</span><b>56% → 68%</b></div>
+    </div>
+    <div class="badge2" id="badge2">no <code>backdrop-filter</code> anywhere</div>
+  </div>
+  <div class="caption" id="cap"><div class="zh" id="czh">同一個底色被疊兩層，直接設 68% 會變成 90%</div><div class="en2" id="cen">The same colour is painted twice — 68% would really show as 90%</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 15.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const lerp = (a,b,k) => a + (b-a) * k
+
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.015 * (t / window.__duration)})`
+  $('k1').style.opacity = ramp(t, 0.2, 0.8)
+  $('f1').style.opacity = ramp(t, 0.6, 1.4)
+  $('f1').style.transform = `translateY(${10 * (1 - ramp(t, 0.6, 1.4))}px)`
+  $('f2').style.opacity = ramp(t, 1.3, 2.0)
+  $('rows').querySelectorAll('.r').forEach((el, i) => {
+    const k = ramp(t, 3.0 + i * 1.1, 3.8 + i * 1.1)
+    el.style.opacity = k
+    el.style.transform = `translateX(${14 * (1 - k)}px)`
+  })
+  $('badge2').style.opacity = ramp(t, 7.4, 8.2)
+  $('cap').style.opacity = ramp(t, 1.4, 2.0) * (1 - ramp(t, 12.2, 13.0))
+  if (t < 6.6) { $('czh').textContent = '同一個底色被疊兩層，直接設 68% 會變成 90%' ; $('cen').textContent = 'The same colour is painted twice — 68% would really show as 90%' }
+  else { $('czh').textContent = '所以外掛反推單層值：滑桿數字才是你看到的數字' ; $('cen').textContent = 'So the plugin solves for the layer value: the slider number is what you see' }
+}
+
+</script></body></html>

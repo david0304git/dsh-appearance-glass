@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+<style></style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="frame" id="frame" style="left:56px;top:44px;width:566px;height:430px">
+    <div class="wall" id="wall"></div><div class="clip" id="host"></div>
+  </div>
+  <div class="togglebar" id="bar" style="position:absolute;left:120px;top:36px;width:440px;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:14px;background:rgba(16,19,29,.8);border:.5px solid rgba(255,255,255,.12)">
+    <div style="font-size:12.5px;color:#e9eaee">Enabled</div>
+    <div class="sw" id="sw" style="position:relative;width:44px;height:26px;border-radius:999px;background:rgba(255,255,255,.16)">
+      <div id="knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff"></div>
+    </div>
+  </div>
+  <div class="caption" id="cap"><div class="zh" id="czh">不喜歡？一個開關就回到原本的 DSH</div><div class="en2" id="cen">Not for you? One switch restores the stock DSH</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 8.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const lerp = (a,b,k) => a + (b-a) * k
+
+const app = buildApp($('host'), { menu: false, card: false })
+applyWallpaper($('wall'), { ...WALL_BLOBS.aurora, strength: 58 })
+window.__render = (t) => {
+  // 20% → 關（100%）→ 再開（20%）
+  const off = ramp(t, 2.0, 2.8) * (1 - ramp(t, 5.4, 6.2))
+  const base = lerp(20, 100, off)
+  applyOpacity(app, { base, side: lerp(55, 100, off), surface: lerp(60, 100, off), overlay: lerp(72, 100, off) })
+  const on = 1 - off
+  $('sw').style.background = `rgba(91,139,255,${0.25 + 0.75 * on})`
+  $('knob').style.left = `${3 + 18 * (1 - on)}px`
+  $('bar').style.opacity = ramp(t, 0.2, 0.9)
+  $('frame').style.opacity = ramp(t, 0.2, 0.9)
+  $('cap').style.opacity = ramp(t, 0.9, 1.5) * (1 - ramp(t, 7.3, 8.0))
+  if (t < 2.2) { $('czh').textContent = '不喜歡？一個開關就回到原本的 DSH' ; $('cen').textContent = 'Not for you? One switch restores the stock DSH' }
+  else if (t < 5.6) { $('czh').textContent = '關掉的瞬間，面板立刻回到不透明' ; $('cen').textContent = 'Switched off, every panel returns to opaque at once' }
+  else { $('czh').textContent = '再打開，設定原封不動還在' ; $('cen').textContent = 'Switch it back on — your settings are untouched' }
+}
+
+</script></body></html>

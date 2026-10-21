@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+<style>.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}</style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="frame" id="frame" style="left:56px;top:44px;width:566px;height:430px">
+    <div class="wall" id="wall"></div><div class="clip" id="host"></div>
+  </div>
+  <div class="ctrl" id="ctrl" style="left:648px;top:44px;width:256px;padding:16px">
+    <div class="h"><span>Follows the theme</span><span class="badge">auto</span></div>
+    <div class="hint">Same opacity values, two schemes — the wallpaper base follows light/dark too.</div>
+    <div style="height:1px;background:rgba(255,255,255,.09);margin:12px 0"></div>
+    <div class="seg" id="seg" style="display:flex;gap:6px">
+      <div class="segi on" id="segDark">Dark</div><div class="segi" id="segLight">Light</div>
+    </div>
+  </div>
+  <div class="flash" id="flash"></div>
+  <div class="caption" id="cap"><div class="zh" id="czh">深色：面板透出壁紙的紫與藍</div><div class="en2" id="cen">Dark: the wallpaper shows through the panels</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 10.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const lerp = (a,b,k) => a + (b-a) * k
+
+const app = buildApp($('host'), { menu: false, card: false })
+$('ctrl').querySelectorAll('.segi').forEach(el => el.style.cssText += 'flex:1;text-align:center;padding:7px 0;border-radius:9px;font-size:11px;background:rgba(255,255,255,.08);color:#a3aab8')
+const light = (t) => t > 4.6
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.015 * (t / window.__duration)})`
+  const isLight = light(t)
+  app.classList.toggle('light', isLight)
+  applyWallpaper($('wall'), { ...WALL_BLOBS.aurora, base: isLight ? '#e9f0ff' : '#0b0f1c', strength: 58 })
+  applyOpacity(app, { base: 26, side: 58, surface: 66, overlay: 78 })
+  $('segDark').style.background = isLight ? 'rgba(255,255,255,.08)' : '#5b8bff'
+  $('segDark').style.color = isLight ? '#a3aab8' : '#fff'
+  $('segLight').style.background = isLight ? '#5b8bff' : 'rgba(255,255,255,.08)'
+  $('segLight').style.color = isLight ? '#fff' : '#a3aab8'
+  // 換色時的白閃
+  const f = t > 4.6 ? Math.max(0, 1 - (t - 4.6) / 0.45) : 0
+  $('flash').style.opacity = f * 0.5
+  const cIn = ramp(t, 0.2, 1.0)
+  $('frame').style.opacity = cIn; $('ctrl').style.opacity = cIn
+  $('cap').style.opacity = ramp(t, 1.2, 1.8) * (1 - ramp(t, 9.2, 10.0))
+  if (t < 4.6) { $('czh').textContent = '深色：面板透出壁紙的紫與藍' ; $('cen').textContent = 'Dark: the wallpaper shows through the panels' }
+  else { $('czh').textContent = '淺色：同一組滑桿，自動換成淺色底色' ; $('cen').textContent = 'Light: the same sliders, the base colour follows the scheme' }
+}
+
+</script></body></html>

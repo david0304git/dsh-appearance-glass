@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="dsg.css">
+<style>
+  .panelwrap{position:absolute;left:214px;top:12px;width:532px;height:404px;overflow:hidden;transform-origin:50% 0;mask-image:linear-gradient(180deg,#000 74%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 74%,transparent 100%);
+    background:var(--dsw-alias-bg-layer-2);border-radius:18px;border:.5px solid rgba(255,255,255,.12);
+    box-shadow:0 40px 90px rgba(0,0,0,.55);padding:4px 18px}
+  .panelwrap .dsg-field{border-bottom:none}
+  .capScrim{position:absolute;left:0;right:0;bottom:0;height:96px;background:linear-gradient(180deg,transparent,rgba(8,10,18,.78) 60%)}
+  .cursor{position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5);opacity:0}
+  .ripple{position:absolute;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.9);opacity:0}
+</style></head>
+<body data-ds-dark-theme>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="panelwrap" id="panel"><div class="dsg-field">
+  <div class="dsg-fieldLabel">內建壁紙</div>
+  <div class="dsg-preview" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #94c4ff 58%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #ffa6d6 49%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #967aff 58%, transparent) 0%, transparent 62%),linear-gradient(158deg, #0b0f1c 0%, #0b0f1c 45%, color-mix(in srgb, #0b0f1c 86%, white) 100%)">
+    <div class="dsg-previewFrame">
+      <div class="dsg-previewSide">
+        <span class="dsg-previewBar dsg-w80"></span>
+        <span class="dsg-previewBar dsg-w60"></span>
+        <span class="dsg-previewNav"></span>
+        <div class="dsg-previewSideFill"></div>
+      </div>
+      <div class="dsg-previewMain"><div class="dsg-previewInner">
+        <div class="dsg-previewCard"><span class="dsg-previewDot"></span><span>預覽</span></div>
+        <span class="dsg-previewText">主面板與卡片</span>
+      </div></div>
+    </div>
+    <div class="dsg-previewMenu">選單</div>
+  </div>
+  <div class="dsg-line"><span class="dsg-lineLabel">色斑</span><div class="dsg-colorRow"><label class="dsg-colorPill"><span class="dsg-colorDot" style="background:#94c4ff"></span><span class="dsg-colorHex">#94C4FF</span><input type="color" class="dsg-colorInput" value="#94c4ff" aria-label="色斑 1"></label><label class="dsg-colorPill"><span class="dsg-colorDot" style="background:#ffa6d6"></span><span class="dsg-colorHex">#FFA6D6</span><input type="color" class="dsg-colorInput" value="#ffa6d6" aria-label="色斑 2"></label><label class="dsg-colorPill"><span class="dsg-colorDot" style="background:#967aff"></span><span class="dsg-colorHex">#967AFF</span><input type="color" class="dsg-colorInput" value="#967aff" aria-label="色斑 3"></label></div></div>
+  <div class="dsg-line"><span class="dsg-lineLabel">底色</span><div class="dsg-colorRow"><label class="dsg-colorPill"><span class="dsg-colorDot" style="background:#0b0f1c"></span><span class="dsg-colorHex">#0B0F1C</span><input type="color" class="dsg-colorInput" value="#0b0f1c" aria-label="底色"></label><button class="dsg-auto" aria-pressed="true">跟隨深淺色</button></div></div>
+  <div class="dsg-line"><span class="dsg-lineLabel">強度</span><div class="dsg-sliderChip"><input type="range" class="dsg-slider" value="58"><span class="dsg-value">58 %</span></div></div>
+  <div class="dsg-line"><span class="dsg-lineLabel">配色</span><div class="dsg-presetRow">
+    <button class="dsg-presetCard" aria-pressed="true"><span class="dsg-presetFill" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #94c4ff 62%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #ffa6d6 53%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #967aff 62%, transparent) 0%, transparent 62%),linear-gradient(158deg, #0b0f1c 0%, #0b0f1c 45%, color-mix(in srgb, #0b0f1c 86%, white) 100%)"></span><span class="dsg-presetName">極光</span></button><button class="dsg-presetCard" aria-pressed="false"><span class="dsg-presetFill" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #5ec8ff 62%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #3a7bd5 53%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #6ee7ff 62%, transparent) 0%, transparent 62%),linear-gradient(158deg, #04121f 0%, #04121f 45%, color-mix(in srgb, #04121f 86%, white) 100%)"></span><span class="dsg-presetName">深海</span></button><button class="dsg-presetCard" aria-pressed="false"><span class="dsg-presetFill" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #ffb37a 62%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #ff6f91 53%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #ffd166 62%, transparent) 0%, transparent 62%),linear-gradient(158deg, #1d1024 0%, #1d1024 45%, color-mix(in srgb, #1d1024 86%, white) 100%)"></span><span class="dsg-presetName">日落</span></button><button class="dsg-presetCard" aria-pressed="false"><span class="dsg-presetFill" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #7ee0a8 62%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #3fa672 53%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #b8e986 62%, transparent) 0%, transparent 62%),linear-gradient(158deg, #0a1410 0%, #0a1410 45%, color-mix(in srgb, #0a1410 86%, white) 100%)"></span><span class="dsg-presetName">森林</span></button><button class="dsg-presetCard" aria-pressed="false"><span class="dsg-presetFill" style="background-image:radial-gradient(120% 90% at 6% 2%, color-mix(in srgb, #9aa4b2 62%, transparent) 0%, transparent 58%),radial-gradient(115% 95% at 94% 6%, color-mix(in srgb, #6b7280 53%, transparent) 0%, transparent 60%),radial-gradient(135% 115% at 58% 104%, color-mix(in srgb, #cbd5e1 62%, transparent) 0%, transparent 62%),linear-gradient(158deg, #0e1013 0%, #0e1013 45%, color-mix(in srgb, #0e1013 86%, white) 100%)"></span><span class="dsg-presetName">石墨</span></button>
+  </div></div>
+  <p class="dsg-hint">三個色斑 ＋ 底色與強度；底色「跟隨深淺色」＝淺色淡藍、深色近黑。</p>
+</div></div></div>
+  <div class="cursor" id="cur"></div><div class="ripple" id="rip"></div>
+  <div class="capScrim"></div><div class="caption" id="cap"><div class="zh" id="czh">設定 → 介面外觀：四根滑桿、背景、壁紙各一區</div><div class="en2" id="cen">Settings → Interface appearance: four sliders, a backdrop, a wallpaper</div></div>
+</div>
+<script>
+window.__duration = 14.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+window.__render = (t) => {
+  const enter = ramp(t, 0.1, 0.9)
+  const pan = 1.0 - 0.03 * (t / window.__duration)
+  $('panel').style.opacity = enter
+  $('panel').style.transform = `scale(${pan}) translateY(${(1-enter)*12 - 6*(t/window.__duration)}px)`
+  // 游標：移到「主畫面」滑桿再按下
+  const move = ramp(t, 2.0, 3.6)
+  const cx = 560 + (300 - 560) * move + 40 * Math.sin(t * 0.6) * 0.3
+  const cy = 470 + (300 - 470) * move
+  $('cur').style.opacity = ramp(t, 1.6, 2.2) * (1 - ramp(t, 9.6, 10.4))
+  $('cur').style.left = cx + 'px'; $('cur').style.top = cy + 'px'
+  const click = ramp(t, 4.0, 4.2) * (1 - ramp(t, 4.6, 5.4))
+  $('rip').style.opacity = click
+  $('rip').style.transform = `scale(${1 + 2.2 * ramp(t, 4.2, 5.2)})`
+  $('rip').style.left = (cx - 7) + 'px'; $('rip').style.top = (cy - 7) + 'px'
+  $('cap').style.opacity = ramp(t, 1.0, 1.6) * (1 - ramp(t, 13.2, 14.0))
+  if (t < 6.4) { $('czh').textContent = '設定 → 介面外觀：一列一個控制項，左緣全部對齊' ; $('cen').textContent = 'Settings → Interface appearance: one control per row, labels aligned' }
+  else if (t < 10.4) { $('czh').textContent = '拖滑桿的同時，上面的即時預覽立刻跟著變' ; $('cen').textContent = 'The live preview follows the slider as you drag' }
+  else { $('czh').textContent = '配色五選一，按一下就換' ; $('cen').textContent = 'Five palettes, one click' }
+}
+</script></body></html>

@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="frame" id="frame" style="left:56px;top:44px;width:566px;height:430px">
+    <div class="wall" id="wall"></div><div class="clip" id="host"></div>
+  </div>  <div class="ctrl" id="ctrl" style="left:648px;top:44px;width:256px"></div>
+  <div class="bignum" id="big" style="left:648px;top:396px;width:256px">
+    <div><span class="v" id="bignum">100</span><span class="u">%</span></div>
+    <div class="k" id="bigk">sidebar · composited</div>
+  </div>
+  <div class="caption" id="cap"><div class="zh" id="czh">側欄可以單獨調透明，主畫面不動</div><div class="en2" id="cen">The sidebar fades on its own — the main panel barely moves</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 13.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const lerp = (a,b,k) => a + (b-a) * k
+
+const app = buildApp($('host'), { menu: true, card: false })
+applyWallpaper($('wall'), { ...WALL_BLOBS.aurora, strength: 58 })
+$('ctrl').innerHTML = `
+    <div class="h"><span>Interface appearance</span><span class="badge">live</span></div>
+    <div class="row"><div class="lab"><span>Main panel</span><b><span id="v-base">68</span>%</b></div>
+      <div class="track"><div class="fill" id="f-base"></div><div class="knob" id="k-base"></div></div></div>
+    <div class="row"><div class="lab"><span>Sidebar</span><b><span id="v-side">68</span>%</b></div>
+      <div class="track"><div class="fill" id="f-side"></div><div class="knob" id="k-side"></div></div></div>
+    <div class="row"><div class="lab"><span>Cards / inputs</span><b><span id="v-sur">68</span>%</b></div>
+      <div class="track"><div class="fill" id="f-sur"></div><div class="knob" id="k-sur"></div></div></div>
+    <div class="row" style="margin-bottom:8px"><div class="lab"><span>Menus / popovers</span><b><span id="v-ove">72</span>%</b></div>
+      <div class="track"><div class="fill" id="f-ove"></div><div class="knob" id="k-ove"></div></div></div>
+    <div class="hint">Slider value = <b style="color:#c9d3e6">composited</b> opacity.</div>`
+const S = {
+  set: (k, v) => {
+    $('v-' + k).textContent = Math.round(v)
+    $('f-' + k).style.width = v + '%'
+    $('k-' + k).style.left = v + '%'
+  },
+}
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.012 * (t / window.__duration)})`
+  const base = 68
+  const side = 100 - 80 * ramp(t, 2.0, 5.0)
+  const sur2 = 100 - 78 * ramp(t, 5.6, 8.4)
+  const ove2 = 100 - 12 * ramp(t, 8.9, 11.4)
+  applyOpacity(app, { base, side, surface: sur2, overlay: ove2 })
+  S.set('base', base); S.set('side', side); S.set('sur', sur2); S.set('ove', ove2)
+  // 大數字跟著當前 beat
+  let key = 'side', val = side
+  if (t >= 5.6) { key = 'surface'; val = sur2 }
+  if (t >= 8.9) { key = 'overlay'; val = ove2 }
+  $('bignum').textContent = Math.round(val)
+  $('bigk').textContent = key + ' · composited'
+  const cIn = ramp(t, 0.2, 1.0)
+  $('frame').style.opacity = cIn; $('ctrl').style.opacity = cIn; $('big').style.opacity = cIn
+  $('cap').style.opacity = ramp(t, 1.0, 1.6) * (1 - ramp(t, 12.3, 13.0))
+  if (t < 5.4) { $('czh').textContent = '側欄可以單獨調透明，主畫面不動'; $('cen').textContent = 'The sidebar fades on its own — the main panel barely moves' }
+  else if (t < 8.7) { $('czh').textContent = '卡片與輸入框是第三個分區'; $('cen').textContent = 'Cards and inputs are their own region' }
+  else { $('czh').textContent = '浮層只降一點：選單與提示要保持清楚'; $('cen').textContent = 'Overlays stay near the top: menus and tooltips must keep their contrast' }
+}
+
+</script></body></html>

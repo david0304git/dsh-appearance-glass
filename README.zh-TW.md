@@ -7,6 +7,11 @@ DSH 外觀插件：**介面透明度**（四個分區獨立可調）＋ **內建
 
 ![外掛圖標](icon.svg)
 
+[![2 分鐘宣傳片](preview/promo-poster.jpg)](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4)
+
+▶ 2 分鐘宣傳片（1920×1080，MIT，可自由轉載）
+
+
 | | |
 | --- | --- |
 | 設定位置 | **設定 → 介面外觀**（`settings.section`，排在「通用設定」之後、「模型」之前） |

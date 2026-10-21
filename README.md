@@ -7,6 +7,11 @@ Plain alpha only — **no blur, no saturation, no glass effects** (modes and liq
 
 ![Plugin icon](icon.svg)
 
+[![Two-minute promo](preview/promo-poster.jpg)](https://github.com/david0304git/dsh-appearance-glass/releases/download/v1.1.1/promo-2min.mp4)
+
+▶ Two-minute promo (1920×1080; the film itself is MIT too)
+
+
 | | |
 | --- | --- |
 | Where it lives | **Settings → Interface appearance** (its own `settings.section` page, right after General and before Models) |

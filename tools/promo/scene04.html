@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="frame" id="frame" style="left:56px;top:44px;width:566px;height:430px">
+    <div class="wall" id="wall"></div><div class="clip" id="host"></div>
+  </div>  <div class="ctrl" id="ctrl" style="left:648px;top:44px;width:256px"></div>
+  <div id="presets" style="display:none"></div>
+  <div class="caption" id="cap"><div class="zh" id="czh">五組配色，一鍵換掉三個色斑與底色</div><div class="en2" id="cen">Five palettes swap the three blobs and the base colour at once</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 15.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const lerp = (a,b,k) => a + (b-a) * k
+
+const app = buildApp($('host'), { menu: false, card: false })
+const order = ['aurora','ocean','sunset','forest','graphite']
+const names = { aurora:'極光', ocean:'深海', sunset:'日落', forest:'森林', graphite:'石墨' }
+$('ctrl').innerHTML = `<div class="h"><span>Built-in wallpaper</span><span class="badge">58%</span></div>
+  <div class="hint" style="margin-top:-6px;font-size:10px">Three blobs, a base colour and a strength — five palettes.</div>
+  <div style="height:1px;background:rgba(255,255,255,.09);margin:12px 0"></div>
+  <div id="wallinfo" style="font-size:11px;color:#c9d3e6;line-height:1.9">colour · <b id="wcolor" style="color:#fff">極光</b></div>
+  <div id="presetsInline" style="display:flex;gap:8px;margin-top:12px"></div>`
+const presetEls = order.map((id, i) => {
+  const el = document.createElement('div')
+  el.style.cssText = 'flex:1;aspect-ratio:1;border-radius:12px;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18);transition:none'
+  $('presetsInline').appendChild(el)
+  return el
+})
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.02 * (t / window.__duration)})`
+  // 每 2.6s 換一個配色，最後一段加強度動畫
+  const idx = Math.min(4, Math.floor(Math.max(0, t - 1.4) / 2.6))
+  const strength = t > 9.6 ? 30 + 50 * ramp(t, 9.8, 12.6) : 58
+  const colors = { ...WALL_BLOBS[order[idx]], strength }
+  applyWallpaper($('wall'), colors)
+  presetEls.forEach((el, i) => {
+    el.style.backgroundImage = wallpaperLayers({ ...WALL_BLOBS[order[i]], strength: 62 })
+    el.style.boxShadow = i === idx
+      ? '0 0 0 2px #5b8bff, inset 0 0 0 .5px rgba(255,255,255,.2)'
+      : 'inset 0 0 0 .5px rgba(255,255,255,.18)'
+    el.style.opacity = i === idx ? 1 : .55
+  })
+  applyOpacity(app, { base: 26, side: 58, surface: 66, overlay: 78 })
+  $('wcolor').textContent = names[order[idx]]
+  $('cap').style.opacity = ramp(t, 1.2, 1.8) * (1 - ramp(t, 14.2, 15.0))
+  $('ctrl').style.opacity = ramp(t, 0.3, 1.0)
+  $('frame').style.opacity = ramp(t, 0.3, 1.0)
+  if (t < 9.4) { $('czh').textContent = '五組配色，一鍵換掉三個色斑與底色'; $('cen').textContent = 'Five palettes swap the three blobs and the base colour at once' }
+  else { $('czh').textContent = '強度決定色斑有多明顯'; $('cen').textContent = 'Strength controls how present the blobs are' }
+}
+
+</script></body></html>

@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+
+  <div class="frame" id="frame" style="left:56px;top:44px;width:566px;height:430px">
+    <div class="wall" id="wall"></div><div class="clip" id="host"></div>
+  </div>
+
+  <div class="ctrl" id="ctrl" style="left:648px;top:52px;width:256px">
+    <div class="h"><span>Interface appearance</span><span class="badge">live</span></div>
+    <div class="row">
+      <div class="lab"><span>Main panel</span><b><span id="v1">100</span>%</b></div>
+      <div class="track"><div class="fill" id="f1" style="width:100%"></div><div class="knob" id="k1" style="left:100%"></div></div>
+    </div>
+    <div class="row" style="opacity:.45">
+      <div class="lab"><span>Sidebar</span><b>100%</b></div>
+      <div class="track"><div class="fill" style="width:100%"></div><div class="knob" style="left:100%"></div></div>
+    </div>
+    <div class="row" style="opacity:.45">
+      <div class="lab"><span>Cards / inputs</span><b>100%</b></div>
+      <div class="track"><div class="fill" style="width:100%"></div><div class="knob" style="left:100%"></div></div>
+    </div>
+    <div class="row" style="opacity:.45;margin-bottom:8px">
+      <div class="lab"><span>Menus / popovers</span><b>100%</b></div>
+      <div class="track"><div class="fill" style="width:100%"></div><div class="knob" style="left:100%"></div></div>
+    </div>
+    <div class="hint">The slider value is the <b style="color:#c9d3e6">composited</b> opacity.</div>
+  </div>
+
+  <div class="bignum" id="big" style="left:648px;top:392px;width:256px">
+    <div><span class="v" id="bignum">100</span><span class="u">%</span></div>
+    <div class="k">main panel · composited</div>
+  </div>
+
+  <div class="caption" id="cap"><div class="zh" id="czh">拖曳「主畫面」滑桿，面板真的變透</div><div class="en2" id="cen">Drag the main-panel slider — the panel really becomes see-through</div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 11.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+const app = buildApp($('host'), { menu: false, card: false })
+applyWallpaper($('wall'), { ...WALL_BLOBS.aurora, strength: 58 })
+window.__render = (t) => {
+  const push = 1 + 0.015 * (t / window.__duration)
+  $('stage').style.transform = `scale(${push})`
+  // 100% → 20%，在第 1.2s 到第 7.6s 之間拖動
+  const p = ramp(t, 1.2, 7.6)
+  const v = Math.round(100 - 80 * p)
+  applyOpacity(app, { base: v, side: 100, surface: 100, overlay: 100 })
+  $('v1').textContent = v
+  $('bignum').textContent = v
+  $('f1').style.width = v + '%'
+  $('k1').style.left = v + '%'
+  const cIn = ramp(t, 0.3, 1.1)
+  $('frame').style.opacity = cIn; $('ctrl').style.opacity = cIn; $('big').style.opacity = cIn
+  $('frame').style.transform = `translateY(${14*(1-cIn)}px)`
+  $('cap').style.opacity = ramp(t, 1.0, 1.8) * (1 - ramp(t, 10.2, 11.0))
+  if (t > 7.8) {
+    $('czh').textContent = '滑桿寫 20%，畫面上就是真的 20%'
+    $('cen').textContent = '20% on the slider is 20% on screen — layer counts are compensated'
+  }
+}
+</script></body></html>

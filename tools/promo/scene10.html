@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css">
+<style>
+.endwrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.eticon{width:104px;height:104px;border-radius:26px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.16)}
+.eticon img{width:100%;height:100%;display:block}
+.etitle{font-size:30px;font-weight:600;letter-spacing:-.01em;color:#f2f4f8;margin-top:6px}
+.ecmd{margin-top:14px;padding:11px 18px;border-radius:11px;font-family:"SF Mono",Menlo,monospace;font-size:13px;
+      color:#dfe6f5;background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.12)}
+.eurl{font-size:12px;color:#9db7ff;letter-spacing:.01em}
+.emetar{font-size:11px;color:#7d8593;letter-spacing:.04em;margin-top:6px}
+</style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+
+  <div class="endwrap">
+    <div class="eticon"><img src="icon.svg" alt=""></div>
+    <div class="etitle">dsh-appearance-glass</div>
+    <div class="ecmd" id="cmd">dsh plugin --profile web add dsh-appearance-glass</div>
+    <div class="eurl" id="url">github.com/david0304git/dsh-appearance-glass</div>
+    <div class="emetar" id="meta">MIT · <span id="ver">v1.1.1</span> · 44 checks</div>
+  </div>
+  <div class="caption" id="cap"><div class="zh" id="czh"></div><div class="en2" id="cen"></div></div>
+</div>
+<script>
+window.__duration = 12.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2 }
+const ramp = (t,a,b) => ease((t-a)/(b-a))
+
+window.__render = (t) => {
+  $('stage').style.transform = `scale(${1 + 0.02 * (t / window.__duration)})`
+  const a = ramp(t, 0.2, 1.0)
+  document.querySelector('.eticon').style.opacity = a
+  document.querySelector('.eticon').style.transform = `scale(${0.92 + 0.08 * a})`
+  document.querySelector('.etitle').style.opacity = ramp(t, 0.7, 1.4)
+  $('cmd').style.opacity = ramp(t, 1.5, 2.2)
+  $('url').style.opacity = ramp(t, 2.4, 3.1)
+  $('meta').style.opacity = ramp(t, 3.4, 4.0)
+  $('cap').style.opacity = 0
+}
+
+</script></body></html>

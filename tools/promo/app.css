@@ -1,0 +1,87 @@
+/* DSH Web 介面 mock：只用官方 token 與外掛本身的 alpha 模型 */
+.app{position:relative;display:flex;width:100%;height:100%;overflow:hidden;color:var(--dsw-alias-label-primary);
+     font-family:-apple-system,"PingFang TC","SF Pro Text",system-ui,sans-serif;--r:var(--dsw-radius-md)}
+/* 四個分區的 alpha 由 JS 逐格設定（百分比） */
+.app{
+  --dsw-alias-bg-base:color-mix(in srgb, var(--dsw-static-neutral-bluish-950) var(--a-base), transparent);
+  --dsw-specific-sidebar-fill:color-mix(in srgb, var(--dsw-static-neutral-bluish-800) var(--a-side), transparent);
+  --dsw-specific-input-major:color-mix(in srgb, var(--dsw-static-neutral-bluish-950) var(--a-sur), transparent);
+  --dsw-specific-menu:color-mix(in srgb, var(--dsw-static-neutral-bluish-850) var(--a-ove), transparent);
+  --dsw-alias-bg-layer-2:color-mix(in srgb, var(--dsw-static-neutral-bluish-900) var(--a-sur), transparent);
+  --dsw-alias-border-l2:color-mix(in srgb, var(--dsw-static-neutral-bluish-00) 12%, transparent);
+  --dsw-alias-border-l3:color-mix(in srgb, var(--dsw-static-neutral-bluish-00) 8%, transparent);
+  --dsw-alias-label-primary:#f2f4f8;
+  --dsw-alias-label-secondary:#a3aab8;
+  --dsw-alias-label-tertiary:#7d8593;
+}
+/* 側欄 */
+.side{display:flex;flex-direction:column;flex:none;width:206px;padding:10px 8px;gap:2px;
+      background:var(--dsw-specific-sidebar-fill);border-right:.5px solid var(--dsw-alias-border-l2)}
+.side .brand{display:flex;align-items:center;gap:8px;padding:6px 8px 12px;font-size:13px;font-weight:600;letter-spacing:.01em}
+.side .brand i{width:18px;height:18px;border-radius:5px;background:linear-gradient(140deg,#5b8bff,#b08bff);display:block}
+.side .search{height:28px;border-radius:8px;background:var(--dsw-specific-input-major);display:flex;align-items:center;
+      padding:0 9px;font-size:11px;color:var(--dsw-alias-label-tertiary);margin-bottom:8px}
+.side .row{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;font-size:11.5px;color:var(--dsw-alias-label-secondary)}
+.side .row.on{background:color-mix(in srgb,var(--dsw-static-neutral-bluish-00) 10%,transparent);color:var(--dsw-alias-label-primary)}
+.side .row .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
+.side .row .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side .spacer{flex:1}
+.side .foot{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;font-size:11px;color:var(--dsw-alias-label-tertiary)}
+/* 主區 */
+.main{position:relative;display:flex;flex-direction:column;flex:1;min-width:0;background:var(--dsw-alias-bg-base)}
+.main .inner{display:flex;flex-direction:column;flex:1;min-width:0;background:var(--dsw-alias-bg-base);padding:0 26px}
+.head{display:flex;align-items:center;justify-content:space-between;height:44px;flex:none;border-bottom:.5px solid var(--dsw-alias-border-l3)}
+.head .h-title{font-size:12.5px;font-weight:600}
+.head .h-right{display:flex;align-items:center;gap:8px}
+.pill{height:24px;padding:0 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;
+      font-size:10.5px;background:var(--dsw-specific-input-major);color:var(--dsw-alias-label-secondary);border:.5px solid var(--dsw-alias-border-l3)}
+.pill.accent{color:#9db7ff;border-color:color-mix(in srgb,#5b8bff 40%,transparent);background:color-mix(in srgb,#5b8bff 14%,transparent)}
+.msgs{flex:1;min-height:0;display:flex;flex-direction:column;gap:14px;padding:18px 0;overflow:hidden}
+.msg{display:flex;gap:10px;max-width:92%}
+.msg .av{width:22px;height:22px;border-radius:6px;flex:none;background:linear-gradient(140deg,#5b8bff,#b08bff)}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg.user .av{background:color-mix(in srgb,var(--dsw-static-neutral-bluish-00) 22%,transparent)}
+.bubble{padding:9px 12px;border-radius:10px;font-size:12px;line-height:1.55;background:var(--dsw-specific-input-major)}
+.msg.user .bubble{background:color-mix(in srgb,#5b8bff 26%,transparent);border:.5px solid color-mix(in srgb,#5b8bff 34%,transparent)}
+.bubble .code{margin-top:8px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--dsw-static-neutral-bluish-950) 70%,transparent);
+      border:.5px solid var(--dsw-alias-border-l3);font-family:"SF Mono",Menlo,monospace;font-size:9.6px;line-height:1.65;color:#c9d3e6;white-space:nowrap;overflow:hidden}
+.bubble .code .k{color:#8ab4ff}
+.bubble .tok{display:flex;justify-content:space-between;gap:10px}
+.bubble .code .s{color:#a5e3a0}
+.bubble .tok b{color:#f2f4f8;font-weight:600}
+.tool{margin-top:8px;display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:8px;font-size:10.5px;
+      background:color-mix(in srgb,var(--dsw-static-neutral-bluish-850) 55%,transparent);border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary)}
+.composer{flex:none;margin:0 0 16px;padding:10px 12px;border-radius:14px;background:var(--dsw-specific-input-major);
+      border:.5px solid var(--dsw-alias-border-l2);display:flex;align-items:center;gap:10px}
+.composer .ph{flex:1;font-size:12px;color:var(--dsw-alias-label-tertiary)}
+.composer .send{width:26px;height:26px;border-radius:50%;background:#5b8bff;display:flex;align-items:center;justify-content:center}
+.composer .send::after{content:"";width:9px;height:9px;border-top:2px solid #fff;border-right:2px solid #fff;transform:rotate(45deg);margin-left:-2px}
+/* 浮層（menu）與卡片（surface） */
+.menu{position:absolute;min-width:150px;padding:5px;border-radius:12px;background:var(--dsw-specific-menu);
+      border:.5px solid var(--dsw-alias-border-l3);box-shadow:0 18px 40px rgba(0,0,0,.45);font-size:11px}
+.menu .mi{padding:6px 8px;border-radius:7px;color:var(--dsw-alias-label-secondary);display:flex;justify-content:space-between;gap:14px}
+.menu .mi.on{background:color-mix(in srgb,var(--dsw-static-neutral-bluish-00) 9%,transparent);color:var(--dsw-alias-label-primary)}
+.card{position:absolute;right:26px;bottom:74px;width:216px;padding:11px 12px;border-radius:12px;
+      background:var(--dsw-alias-bg-layer-2);border:.5px solid var(--dsw-alias-border-l2);box-shadow:0 16px 36px rgba(0,0,0,.35)}
+.card .ct{font-size:11px;font-weight:600;margin-bottom:5px}
+.card .cl{font-size:10.5px;color:var(--dsw-alias-label-tertiary);line-height:1.5}
+.card .bar{height:5px;border-radius:3px;margin-top:8px;background:color-mix(in srgb,#5b8bff 55%,transparent)}
+.card .bar.b2{width:62%;margin-top:5px;background:color-mix(in srgb,#5b8bff 30%,transparent)}
+/* 壁紙層 */
+.wall{position:absolute;inset:0;background-repeat:no-repeat}
+
+/* 淺色變體：只換 label／border 與三個表面色的靜態底色 */
+.app.light{
+  --dsw-alias-label-primary:#151517;
+  --dsw-alias-label-secondary:#5b6068;
+  --dsw-alias-label-tertiary:#7e838c;
+  --dsw-alias-border-l2:rgba(0,0,0,.10);
+  --dsw-alias-border-l3:rgba(0,0,0,.07);
+}
+.app.light{
+  --dsw-alias-bg-base:color-mix(in srgb, #ffffff var(--a-base), transparent);
+  --dsw-specific-sidebar-fill:color-mix(in srgb, #e8ecf4 var(--a-side), transparent);
+  --dsw-specific-input-major:color-mix(in srgb, #ffffff var(--a-sur), transparent);
+  --dsw-specific-menu:color-mix(in srgb, #f4f6fa var(--a-ove), transparent);
+  --dsw-alias-bg-layer-2:color-mix(in srgb, #f4f6fa var(--a-sur), transparent);
+}

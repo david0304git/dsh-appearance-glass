@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="stage.css"><link rel="stylesheet" href="app.css">
+<style>
+  .frame{position:absolute;left:120px;top:60px;width:720px;height:400px;border-radius:14px;overflow:hidden;
+         border:.5px solid rgba(255,255,255,.14);box-shadow:0 40px 90px rgba(0,0,0,.6)}
+  .frame .clip{position:absolute;inset:0}
+</style></head>
+<body>
+<div class="stage" id="stage">
+  <div class="bgimg"></div>
+  <div class="frame" id="frame"><div class="wall" id="wall"></div><div class="clip" id="host"></div></div>
+  <div class="caption" id="cap"><div class="zh" id="czh"></div><div class="en2" id="cen"></div></div>
+</div>
+<script src="app.js"></script>
+<script>
+window.__duration = 6.0
+const $ = (id) => document.getElementById(id)
+const ease = (x) => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3)
+const ramp = (t, a, b) => ease((t - a) / (b - a))
+const app = buildApp($('host'), { menu: false, card: false })
+applyWallpaper($('wall'), { ...WALL_BLOBS.aurora, strength: 58 })
+// 預設 DSH：全部 100%（不透明）
+applyOpacity(app, { base: 100, side: 100, surface: 100, overlay: 100 })
+$('czh').textContent = 'DSH 預設：面板不透明，桌面與壁紙都被擋住'
+$('cen').textContent = 'Stock DSH: opaque surfaces, the desktop never shows through'
+window.__render = (t) => {
+  const push = 1 + 0.02 * (t / window.__duration)
+  $('stage').style.transform = `scale(${push})`
+  const f = ramp(t, 0.2, 1.2)
+  $('frame').style.opacity = f
+  $('frame').style.transform = `translateY(${16 * (1 - f)}px)`
+  const c = ramp(t, 1.4, 2.2) * (1 - ramp(t, 5.2, 6.0))
+  $('cap').style.opacity = c
+}
+</script></body></html>
